@@ -98,7 +98,6 @@ export PATH=$GOPATH/src/github.com/huawei/DockerMachineDriver4OTC:$PATH
 ## License
 Apache 2.0
 
-#test command
+## test command
 ./bin/docker-machine -D create -d otc --otc-access-key-id=DFNQWPE4JSXA6BQEOEBY --otc-access-key-secret=1DUumFBPMcE5AIcO6olMNvjmaOA76k0MLTAOfAyM --otc-security-group=default --otc-tenant-id=15eae18081ba40fabd76979bdbf35d0e --otc-region=southchina --otc-vpc-id=ecbd1d70-8c7e-4bdf-bb2c-b3e2b7f7e15b --otc-flavor-id=103 --otc-image-id=627a1223-2ca3-46a7-8d5f-7aef22c74ee6 --otc-subnet-id=a81eee33-c0c3-445f-988a-248ee426fd8d test
-=======
-# DockerMachineDriver4OTC
+
