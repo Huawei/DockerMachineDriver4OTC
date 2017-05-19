@@ -35,9 +35,9 @@ const (
 	dockerPort     = 2376
 
 	serviceName          = "ecs"
-	secGrpListNumPerPage = 10
-	imgListNumPerPage    = 10
-	subnetListNumPerPage = 10
+	secGrpListNumPerPage = 200
+	imgListNumPerPage    = 200
+	subnetListNumPerPage = 200
 
 	errorMandatoryEnvOrOption string = "%s must be specified either using the environment variable %s or the CLI option %s"
 	errorBothOptions          string = "Both %s and %s must be specified"
@@ -708,11 +708,11 @@ func (d *Driver) configureFlavor(flavorId string) error {
 }
 
 func (d *Driver) configureSecurityGroup(groupName string) error {
-	log.Debugf("%s | Configure security groups in %s", d.MachineName, d.VpcId)
+	log.Debugf("%s | Configure security groups", d.MachineName)
 
 	pClient := d.initClient()
 
-	listSecGrpRsp := pClient.ListSecurityGroups(secGrpListNumPerPage, "", d.VpcId)
+	listSecGrpRsp := pClient.ListSecurityGroups(secGrpListNumPerPage, "", "")
 	for _, grp := range listSecGrpRsp.SecurityGroups {
 		if grp.Name == groupName {
 			log.Debugf("%s | Found existing security group (%s) in %s", d.MachineName, groupName, d.VpcId)
