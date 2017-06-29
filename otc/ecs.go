@@ -669,7 +669,7 @@ func (d *Driver) configureImage(imageId string) error {
 	//listImgsReq.SetLimit(imgListNumPerPage)
 
 	imagesList := pClient.ListCloudImages(listImgsReq)
-	log.Debugf("%v", imagesList.Images)
+	// buggy log.Debugf("%v", imagesList.Images)
 
 	for _, image := range imagesList.Images {
 		if imageId == image.Id {
