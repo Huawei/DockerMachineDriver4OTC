@@ -565,11 +565,12 @@ func (d *Driver) checkJobStatus(jobid string) error {
 
 	for {
 		ecsJobStatusResp := pClient.ShowEcsJob(jobid)
+		if len( ecsJobStatusResp.Entities.SubJobs) > 0 {
+			d.InstanceId = ecsJobStatusResp.Entities.SubJobs[0].Entities.Server_id
+		}
 
 		if ecsJobStatusResp.Status == "SUCCESS" {
-			log.Debugf("%s | job return value are: %v and returned instance id is: %s", d.MachineName, ecsJobStatusResp, ecsJobStatusResp.Entities.SubJobs[0].Entities.Server_id)
-			d.InstanceId = ecsJobStatusResp.Entities.SubJobs[0].Entities.Server_id
-			log.Debugf("%s | instance id is: %s", d.MachineName, d.InstanceId)
+			log.Debugf("%s | job return value are: %v and returned instance id is: %s", d.MachineName, ecsJobStatusResp, d.InstanceId)
 			break
 		}
 		if ecsJobStatusResp.Status == "FAIL" {
