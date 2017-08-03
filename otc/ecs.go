@@ -450,18 +450,22 @@ func (d *Driver) Remove() error {
 		return fmt.Errorf("%s | Failed to delete instance %s: %v", d.MachineName, d.InstanceId, err)
 	}
 
-	log.Infof("%s | Removing elastic ip...", d.MachineName)
-	pClient = d.initClient()
-	deleteElasticIpResp := pClient.DeletePublicIp(d.ElasticIPId)
-	if deleteElasticIpResp.ResponseCode != modules.HttpOK {
-		return fmt.Errorf("%s | Failed to remove elastic ip: %v", d.MachineName, deleteElasticIpResp.ErrorInfo.Description)
+	if d.ElasticIPId != "" {
+		log.Infof("%s | Removing elastic ip...", d.MachineName)
+		pClient = d.initClient()
+		deleteElasticIpResp := pClient.DeletePublicIp(d.ElasticIPId)
+		if deleteElasticIpResp.ResponseCode != modules.HttpOK {
+			return fmt.Errorf("%s | Failed to remove elastic ip: %v", d.MachineName, deleteElasticIpResp.ErrorInfo.Description)
+		}
 	}
 
-	log.Infof("%s | Removing instance key pair...", d.MachineName)
-	pClient = d.initClient()
-	deleteKeyPairResp := pClient.DeleteKeyPair(d.KeyName)
-	if deleteKeyPairResp.ResponseCode != modules.HttpOK {
-		return fmt.Errorf("%s | Failed to delete key pair %s: %v", d.MachineName, d.InstanceId, deleteKeyPairResp.ErrorInfo.Description)
+	if d.KeyName != "" {
+		log.Infof("%s | Removing instance key pair(%s)...", d.MachineName,d.KeyName)
+		pClient = d.initClient()
+		deleteKeyPairResp := pClient.DeleteKeyPair(d.KeyName)
+		if deleteKeyPairResp.ResponseCode != modules.HttpOK {
+			return fmt.Errorf("%s | Failed to delete key pair %s: %v", d.MachineName, d.InstanceId, deleteKeyPairResp.ErrorInfo.Description)
+		}
 	}
 
 	return nil
@@ -493,13 +497,16 @@ func (d *Driver) instanceKeyPairCreate() error {
 	createKeypairReq.Init(keypairCreate)
 
 	kp := pClient.CreateKeypair(createKeypairReq)
-
 	if kp.Keypair.Name != "" {
 		log.Debugf("%s | Success to create key pair: %s", d.MachineName, kp.Keypair.Name)
 		d.KeyName = kp.Keypair.Name
+		return nil
+	} else  if  kp.ResponseCode == 409 {
+		 return  fmt.Errorf("Keypair(%s) existed, please removev it from the console, err %v", d.MachineName, kp.ErrorInfo)
+	} else {
+		return fmt.Errorf("unknown error, status code: %d, err: %v", kp.ResponseCode, kp.ErrorInfo)
 	}
 
-	return nil
 }
 
 func (d *Driver) createInstance() (ecsModules.CreateCloudServerResp, error) {
