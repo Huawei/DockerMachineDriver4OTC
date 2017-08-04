@@ -333,7 +333,12 @@ func (d *Driver) Create() error {
 
 	log.Infof("%s | Issuing request to create instance ...", d.MachineName)
 	createResp, err := d.createInstance()
-	if err != nil {
+	if err != nil || modules.HttpOK != createResp.ResponseCode {
+		pClient := d.initClient()
+		deleteKeyPairResp := pClient.DeleteKeyPair(d.KeyName)
+		if deleteKeyPairResp.ResponseCode != modules.HttpOK {
+			return fmt.Errorf("%s | Failed to delete key pair %s: %v", d.MachineName, d.InstanceId, deleteKeyPairResp.ErrorInfo.Description)
+		}
 		return fmt.Errorf("%s | Failed to crate instance: %v", d.MachineName, err)
 	}
 	d.JobId = createResp.Job_id
