@@ -32,7 +32,7 @@ import (
 */
 func (client *Client) ListCloudImages(listCloudImagesReqEx *imsModules.ListCloudImagesReqEx) *imsModules.ListCloudImagesResp {
 	ListCloudImagesResp := &imsModules.ListCloudImagesResp{}
-	client.RequestParam.Url = client.RequestParam.Endpoint + "/v2/cloudimages" + listCloudImagesReqEx.GetAbsolutePath()
+	client.RequestParam.Url = "https://ims." +  client.RequestParam.Endpoint + "/v2/cloudimages" + listCloudImagesReqEx.GetAbsolutePath()
 	client.RequestParam.Method = "GET"
 	client.RequestParam.BodyContent = ""
 

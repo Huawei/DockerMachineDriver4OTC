@@ -32,7 +32,7 @@ import (
  */
 func (client *Client) DeleteVpc(vpc_id string) *vpcModules.DeleteVpcResp {
 	DeleteVpcResp := &vpcModules.DeleteVpcResp{}
-	client.RequestParam.Url = client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/vpcs/" + vpc_id
+	client.RequestParam.Url = "https://vpc." +  client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/vpcs/" + vpc_id
 
 	client.RequestParam.Method = "DELETE"
 	client.RequestParam.BodyContent = ""
@@ -60,7 +60,7 @@ func (client *Client) DeleteVpc(vpc_id string) *vpcModules.DeleteVpcResp {
  */
 func (client *Client) CreateVpc(createVpcReq vpcModules.CreateVpcReq) *vpcModules.CreateVpcResp {
 	CreateVpcResp := &vpcModules.CreateVpcResp{}
-	client.RequestParam.Url = client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/vpcs"
+	client.RequestParam.Url = "https://vpc." +  client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/vpcs"
 	client.RequestParam.Method = "POST"
 	client.RequestParam.BodyContent = createVpcReq.GetBodyContent()
 
@@ -90,7 +90,7 @@ func (client *Client) CreateVpc(createVpcReq vpcModules.CreateVpcReq) *vpcModule
  */
 func (client *Client) ShowVpc(vpc_id string) *vpcModules.ShowVpcResp {
 	ShowVpcResp := &vpcModules.ShowVpcResp{}
-	client.RequestParam.Url = client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/vpcs/" + vpc_id
+	client.RequestParam.Url = "https://vpc." +  client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/vpcs/" + vpc_id
 
 	client.RequestParam.Method = "GET"
 	client.RequestParam.BodyContent = ""
@@ -122,7 +122,7 @@ func (client *Client) ShowVpc(vpc_id string) *vpcModules.ShowVpcResp {
 */
 func (client *Client) CreateSubnet(createSubnetReq *vpcModules.CreateSubnetReq) *vpcModules.CreateSubnetResp {
 	CreateSubnetResp := &vpcModules.CreateSubnetResp{}
-	client.RequestParam.Url = client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/subnets"
+	client.RequestParam.Url = "https://vpc." +  client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/subnets"
 
 	client.RequestParam.Method = "POST"
 	client.RequestParam.BodyContent = createSubnetReq.GetBodyContent()
@@ -153,7 +153,7 @@ func (client *Client) CreateSubnet(createSubnetReq *vpcModules.CreateSubnetReq) 
  */
 func (client *Client) ShowSubnet(subnet_id string) *vpcModules.ShowSubnetResp {
 	ShowSubnetResp := &vpcModules.ShowSubnetResp{}
-	client.RequestParam.Url = client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/subnets/" + subnet_id
+	client.RequestParam.Url = "https://vpc." +  client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/subnets/" + subnet_id
 
 	client.RequestParam.BodyContent = ""
 	client.RequestParam.Method = "GET"
@@ -177,7 +177,7 @@ func (client *Client) ShowSubnet(subnet_id string) *vpcModules.ShowSubnetResp {
 
 func (client *Client) ListSubnets(limit int, marker, vpc_id string) *vpcModules.ListSubnetsResp {
 	ListSubnetsResp := &vpcModules.ListSubnetsResp{}
-	client.RequestParam.Url = client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/subnets" + "?limit=" + fmt.Sprintf("%d", limit) + "&marker=" + marker + "&vpc_id=" + vpc_id
+	client.RequestParam.Url = "https://vpc." +  client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/subnets" + "?limit=" + fmt.Sprintf("%d", limit) + "&marker=" + marker + "&vpc_id=" + vpc_id
 
 	client.RequestParam.BodyContent = ""
 	client.RequestParam.Method = "GET"
@@ -209,7 +209,7 @@ func (client *Client) ListSubnets(limit int, marker, vpc_id string) *vpcModules.
  */
 func (client *Client) DeleteSubnet(vpc_id, subnet_id string) *vpcModules.DeleteSubnetResp {
 	DeleteSubnetResp := &vpcModules.DeleteSubnetResp{}
-	client.RequestParam.Url = client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/vpcs/" + vpc_id + "/subnets/" + subnet_id
+	client.RequestParam.Url = "https://vpc." +  client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/vpcs/" + vpc_id + "/subnets/" + subnet_id
 
 	client.RequestParam.BodyContent = ""
 	client.RequestParam.Method = "DELETE"
@@ -239,7 +239,7 @@ func (client *Client) DeleteSubnet(vpc_id, subnet_id string) *vpcModules.DeleteS
 */
 func (client *Client) UpdateBandwidth(bandwidth_id string, updateBandwidthReq *vpcModules.UpdateBandwidthReq) *vpcModules.UpdateBandwidthResp {
 	UpdateBandwidthResp := &vpcModules.UpdateBandwidthResp{}
-	client.RequestParam.Url = client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/bandwidths/" + bandwidth_id
+	client.RequestParam.Url = "https://vpc." +  client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/bandwidths/" + bandwidth_id
 
 	client.RequestParam.BodyContent = updateBandwidthReq.GetBodyContent()
 	client.RequestParam.Method = "PUT"
@@ -275,7 +275,7 @@ func (client *Client) UpdateBandwidth(bandwidth_id string, updateBandwidthReq *v
 */
 func (client *Client) ListBandwidths(limit int, marker string) *vpcModules.ListBandwidthsResp {
 	ListBandwidthsResp := &vpcModules.ListBandwidthsResp{}
-	client.RequestParam.Url = client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/bandwidths" + "?limit=" + fmt.Sprintf("%d", limit) + "&marker=" + marker
+	client.RequestParam.Url = "https://vpc." +  client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/bandwidths" + "?limit=" + fmt.Sprintf("%d", limit) + "&marker=" + marker
 
 	client.RequestParam.Method = "GET"
 	client.RequestParam.BodyContent = ""
@@ -307,7 +307,7 @@ func (client *Client) ListBandwidths(limit int, marker string) *vpcModules.ListB
 */
 func (client *Client) CreateSecurityGroup(createSecurityGroupReq *vpcModules.CreateSecurityGroupReq) *vpcModules.CreateSecurityGroupResp {
 	CreateSecurityGroupResp := &vpcModules.CreateSecurityGroupResp{}
-	client.RequestParam.Url = client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/security-groups"
+	client.RequestParam.Url = "https://vpc." +  client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/security-groups"
 
 	client.RequestParam.Method = "POST"
 	client.RequestParam.BodyContent = createSecurityGroupReq.GetBodyContent()
@@ -345,7 +345,7 @@ func (client *Client) CreateSecurityGroup(createSecurityGroupReq *vpcModules.Cre
 */
 func (client *Client) ListSecurityGroups(limit int, marker, vpc_id string) *vpcModules.ListSecurityGroupsResp {
 	ListSecurityGroupsResp := &vpcModules.ListSecurityGroupsResp{}
-	client.RequestParam.Url = client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/security-groups" + "?limit=" + fmt.Sprintf("%d", limit) + "&marker=" + marker + "&vpc_id=" + vpc_id
+	client.RequestParam.Url = "https://vpc." +  client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/security-groups" + "?limit=" + fmt.Sprintf("%d", limit) + "&marker=" + marker + "&vpc_id=" + vpc_id
 
 	client.RequestParam.Method = "GET"
 	client.RequestParam.BodyContent = ""
@@ -377,7 +377,7 @@ func (client *Client) ListSecurityGroups(limit int, marker, vpc_id string) *vpcM
 */
 func (client *Client) CreatePublicIp(createPublicipReq *vpcModules.CreatePublicIpReq) *vpcModules.CreatePublicIpResp {
 	CreatePublicIpResp := &vpcModules.CreatePublicIpResp{}
-	client.RequestParam.Url = client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/publicips"
+	client.RequestParam.Url = "https://vpc." +  client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/publicips"
 
 	client.RequestParam.Method = "POST"
 	client.RequestParam.BodyContent = createPublicipReq.GetBodyContent()
@@ -413,7 +413,7 @@ func (client *Client) CreatePublicIp(createPublicipReq *vpcModules.CreatePublicI
 */
 func (client *Client) UpdatePublicIp(publicip_id string, updatePublicIpReq *vpcModules.UpdatePublicIpReq) *vpcModules.UpdatePublicIpResp {
 	UpdatePublicIpResp := &vpcModules.UpdatePublicIpResp{}
-	client.RequestParam.Url = client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/publicips/" + publicip_id
+	client.RequestParam.Url = "https://vpc." +  client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/publicips/" + publicip_id
 
 	client.RequestParam.Method = "PUT"
 	client.RequestParam.BodyContent = updatePublicIpReq.GetBodyContent()
@@ -445,7 +445,7 @@ func (client *Client) UpdatePublicIp(publicip_id string, updatePublicIpReq *vpcM
 */
 func (client *Client) DeletePublicIp(publicip_id string) *vpcModules.DeletePublicIpResp {
 	DeletePublicIpResp := &vpcModules.DeletePublicIpResp{}
-	client.RequestParam.Url = client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/publicips/" + publicip_id
+	client.RequestParam.Url = "https://vpc." +  client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/publicips/" + publicip_id
 
 	client.RequestParam.Method = "DELETE"
 	client.RequestParam.BodyContent = ""
