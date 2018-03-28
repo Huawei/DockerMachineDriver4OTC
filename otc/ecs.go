@@ -8,7 +8,7 @@ import (
 	"io"
 	"io/ioutil"
 	_ "os"
-	_ "strings"
+	"strings"
 	"time"
 
 	_ "github.com/huawei/DockerMachineDriver4OTC/otcgo/ecs"
@@ -264,7 +264,7 @@ func generateId() string {
 func (d *Driver) initClient() *client.Client {
 	var clientConf modules.ClientConfiguration
 
-	clientConf.Endpoint = d.ServiceEndpoint
+	clientConf.Endpoint = strings.Split(d.ServiceEndpoint, "https://ecs.")[1]
 	clientConf.ServiceName = serviceName
 	clientConf.Region = d.Region
 

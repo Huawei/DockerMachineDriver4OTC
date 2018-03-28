@@ -25,7 +25,7 @@ import (
 func (client *Client) CreateCloudServer(createCloudServerReq ecsModules.CreateCloudServerReq) ecsModules.CreateCloudServerResp {
 	createCloudServerResp := ecsModules.CreateCloudServerResp{}
 
-	client.RequestParam.Url = client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/cloudservers"
+	client.RequestParam.Url = "https://ecs." +  client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/cloudservers"
 	client.RequestParam.Method = modules.HTTP_POST
 	client.RequestParam.RequestContentType = modules.ApplicationJson
 	client.RequestParam.BodyContent = createCloudServerReq.GetBodyContent()
@@ -48,7 +48,7 @@ func (client *Client) CreateCloudServer(createCloudServerReq ecsModules.CreateCl
 func (client *Client) DeleteCloudServer(deleteCloudServerReq ecsModules.DeleteCloudServerReq) ecsModules.DeleteCloudServerResp {
 	deleteCloudServerResp := ecsModules.DeleteCloudServerResp{}
 
-	client.RequestParam.Url = client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/cloudservers/delete"
+	client.RequestParam.Url = "https://ecs." +  client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/cloudservers/delete"
 	client.RequestParam.Method = modules.HTTP_POST
 	client.RequestParam.RequestContentType = modules.ApplicationJson
 	client.RequestParam.BodyContent = deleteCloudServerReq.GetBodyContent()
@@ -71,7 +71,7 @@ func (client *Client) DeleteCloudServer(deleteCloudServerReq ecsModules.DeleteCl
 func (client *Client) ShowEcsJob(job_id string) ecsModules.ShowEcsJobResp {
 	showEcsJobResp := ecsModules.ShowEcsJobResp{}
 
-	client.RequestParam.Url = client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/jobs/" + job_id
+	client.RequestParam.Url = "https://ecs." +  client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/jobs/" + job_id
 	client.RequestParam.Method = modules.HTTP_GET
 	client.RequestParam.RequestContentType = modules.ApplicationJson
 	client.RequestParam.BodyContent = ""
@@ -94,7 +94,7 @@ func (client *Client) ShowEcsJob(job_id string) ecsModules.ShowEcsJobResp {
 func (client *Client) ListCloudServerFlavorsExt() ecsModules.ListCloudServerFlavorsExtResp {
 	listCloudServerFlavorsExtResp := ecsModules.ListCloudServerFlavorsExtResp{}
 
-	client.RequestParam.Url = client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/cloudservers/flavors"
+	client.RequestParam.Url = "https://ecs." +  client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/cloudservers/flavors"
 	client.RequestParam.Method = modules.HTTP_GET
 	client.RequestParam.RequestContentType = modules.ApplicationJson
 	client.RequestParam.BodyContent = ""
