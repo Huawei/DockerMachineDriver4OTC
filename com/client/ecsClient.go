@@ -17,6 +17,7 @@ package client
 
 import (
 	"encoding/json"
+	"github.com/docker/machine/libmachine/log"
 	"github.com/huawei/DockerMachineDriver4OTC/com/cpp_sdk_core"
 	"github.com/huawei/DockerMachineDriver4OTC/com/modules"
 	"github.com/huawei/DockerMachineDriver4OTC/com/modules/ecsModules"
@@ -25,7 +26,7 @@ import (
 func (client *Client) CreateCloudServer(createCloudServerReq ecsModules.CreateCloudServerReq) ecsModules.CreateCloudServerResp {
 	createCloudServerResp := ecsModules.CreateCloudServerResp{}
 
-	client.RequestParam.Url = "https://ecs." +  client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/cloudservers"
+	client.RequestParam.Url = "https://ecs." + client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/cloudservers"
 	client.RequestParam.Method = modules.HTTP_POST
 	client.RequestParam.RequestContentType = modules.ApplicationJson
 	client.RequestParam.BodyContent = createCloudServerReq.GetBodyContent()
@@ -37,6 +38,7 @@ func (client *Client) CreateCloudServer(createCloudServerReq ecsModules.CreateCl
 		json.Unmarshal([]byte(Result.RespMessage), &createCloudServerResp)
 	} else {
 		createCloudServerResp.ResponseCode = Result.ResponseCode
+		log.Errorf("CreateCloudServer failed with: %s", Result.RespMessage)
 		var Error modules.ErrorInfo
 		json.Unmarshal([]byte(Result.RespMessage), &Error)
 		createCloudServerResp.ErrorInfo = Error
@@ -48,7 +50,7 @@ func (client *Client) CreateCloudServer(createCloudServerReq ecsModules.CreateCl
 func (client *Client) DeleteCloudServer(deleteCloudServerReq ecsModules.DeleteCloudServerReq) ecsModules.DeleteCloudServerResp {
 	deleteCloudServerResp := ecsModules.DeleteCloudServerResp{}
 
-	client.RequestParam.Url = "https://ecs." +  client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/cloudservers/delete"
+	client.RequestParam.Url = "https://ecs." + client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/cloudservers/delete"
 	client.RequestParam.Method = modules.HTTP_POST
 	client.RequestParam.RequestContentType = modules.ApplicationJson
 	client.RequestParam.BodyContent = deleteCloudServerReq.GetBodyContent()
@@ -71,7 +73,7 @@ func (client *Client) DeleteCloudServer(deleteCloudServerReq ecsModules.DeleteCl
 func (client *Client) ShowEcsJob(job_id string) ecsModules.ShowEcsJobResp {
 	showEcsJobResp := ecsModules.ShowEcsJobResp{}
 
-	client.RequestParam.Url = "https://ecs." +  client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/jobs/" + job_id
+	client.RequestParam.Url = "https://ecs." + client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/jobs/" + job_id
 	client.RequestParam.Method = modules.HTTP_GET
 	client.RequestParam.RequestContentType = modules.ApplicationJson
 	client.RequestParam.BodyContent = ""
@@ -81,11 +83,13 @@ func (client *Client) ShowEcsJob(job_id string) ecsModules.ShowEcsJobResp {
 	if modules.IsHttpOk(Result.ResponseCode) {
 		showEcsJobResp.ResponseCode = modules.HttpOK
 		json.Unmarshal([]byte(Result.RespMessage), &showEcsJobResp)
+		log.Debugf("get ECS job status: %v", Result.RespMessage)
 	} else {
 		showEcsJobResp.ResponseCode = Result.ResponseCode
 		var Error modules.ErrorInfo
 		json.Unmarshal([]byte(Result.RespMessage), &Error)
 		showEcsJobResp.ErrorInfo = Error
+		log.Debugf("get ECS job status failed: %v", Result.RespMessage)
 	}
 
 	return showEcsJobResp
@@ -94,7 +98,7 @@ func (client *Client) ShowEcsJob(job_id string) ecsModules.ShowEcsJobResp {
 func (client *Client) ListCloudServerFlavorsExt() ecsModules.ListCloudServerFlavorsExtResp {
 	listCloudServerFlavorsExtResp := ecsModules.ListCloudServerFlavorsExtResp{}
 
-	client.RequestParam.Url = "https://ecs." +  client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/cloudservers/flavors"
+	client.RequestParam.Url = "https://ecs." + client.RequestParam.Endpoint + "/v1/" + client.TenantID + "/cloudservers/flavors"
 	client.RequestParam.Method = modules.HTTP_GET
 	client.RequestParam.RequestContentType = modules.ApplicationJson
 	client.RequestParam.BodyContent = ""

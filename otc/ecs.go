@@ -84,6 +84,7 @@ type Driver struct {
 	/*ecsclient *ecs.Client
 	imsclient *ims.Client
 	vpcclient *vpc.Client*/
+	PrivateIPAddress string
 }
 
 func (d *Driver) GetCreateFlags() []mcnflag.Flag {
@@ -339,7 +340,7 @@ func (d *Driver) Create() error {
 		if deleteKeyPairResp.ResponseCode != modules.HttpOK {
 			return fmt.Errorf("%s | Failed to delete key pair %s: %v", d.MachineName, d.InstanceId, deleteKeyPairResp.ErrorInfo.Description)
 		}
-		return fmt.Errorf("%s | Failed to crate instance: %v", d.MachineName, err)
+		return fmt.Errorf("%s | Failed to create instance: %v, response code is %d", d.MachineName, err, createResp.ResponseCode)
 	}
 	d.JobId = createResp.Job_id
 	log.Infof("%s | job for creating instance: %s and reponse code: %d and err: %v", d.MachineName, d.JobId, createResp.ResponseCode, createResp.ErrorInfo)
@@ -412,6 +413,17 @@ func (d *Driver) GetState() (state.State, error) {
 		return state.None, err
 	}
 
+	// FIXME: PrivateIPAddress is not stored to config.json for now
+	// because docker-machine did not get any update from drivers
+	for _, paddrs := range stateResp.Server.Addresses {
+		for _, paddr := range paddrs {
+			if paddr.Addr != "" {
+				split := strings.Split(paddr.Addr, " ")
+				d.PrivateIPAddress = split[0]
+			}
+		}
+	}
+
 	switch stateResp.Server.Status {
 	case "ACTIVE":
 		return state.Running, nil
@@ -420,6 +432,7 @@ func (d *Driver) GetState() (state.State, error) {
 	case "ERROR":
 		return state.Error, nil
 	}
+
 	return state.None, nil
 }
 
@@ -465,7 +478,7 @@ func (d *Driver) Remove() error {
 	}
 
 	if d.KeyName != "" {
-		log.Infof("%s | Removing instance key pair(%s)...", d.MachineName,d.KeyName)
+		log.Infof("%s | Removing instance key pair(%s)...", d.MachineName, d.KeyName)
 		pClient = d.initClient()
 		deleteKeyPairResp := pClient.DeleteKeyPair(d.KeyName)
 		if deleteKeyPairResp.ResponseCode != modules.HttpOK {
@@ -506,8 +519,8 @@ func (d *Driver) instanceKeyPairCreate() error {
 		log.Debugf("%s | Success to create key pair: %s", d.MachineName, kp.Keypair.Name)
 		d.KeyName = kp.Keypair.Name
 		return nil
-	} else  if  kp.ResponseCode == 409 {
-		 return  fmt.Errorf("Keypair(%s) existed, please removev it from the console, err %v", d.MachineName, kp.ErrorInfo)
+	} else if kp.ResponseCode == 409 {
+		return fmt.Errorf("Keypair(%s) existed, please remove it from the console, err %v", d.MachineName, kp.ErrorInfo)
 	} else {
 		return fmt.Errorf("unknown error, status code: %d, err: %v", kp.ResponseCode, kp.ErrorInfo)
 	}
@@ -577,7 +590,7 @@ func (d *Driver) checkJobStatus(jobid string) error {
 
 	for {
 		ecsJobStatusResp := pClient.ShowEcsJob(jobid)
-		if len( ecsJobStatusResp.Entities.SubJobs) > 0 {
+		if len(ecsJobStatusResp.Entities.SubJobs) > 0 {
 			d.InstanceId = ecsJobStatusResp.Entities.SubJobs[0].Entities.Server_id
 		}
 
@@ -657,7 +670,7 @@ func (d *Driver) configureSubnet(subnetId string) error {
 	pClient := d.initClient()
 
 	subnetList := pClient.ListSubnets(subnetListNumPerPage, "", d.VpcId)
-	log.Debugf("subnets:%v response code:%s error infor:%v", subnetList.Subnets, subnetList.ResponseCode, subnetList.ErrorInfo)
+	log.Debugf("subnets:%v response code:%d error info:%v", subnetList.Subnets, subnetList.ResponseCode, subnetList.ErrorInfo)
 
 	for _, subnet := range subnetList.Subnets {
 		if subnetId == subnet.Id {
