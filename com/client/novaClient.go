@@ -26,7 +26,7 @@ import (
 func (client *Client) ListInterfaces(server_id string) novaModules.ListInterfacesResp {
 	listInterfacesResp := novaModules.ListInterfacesResp{}
 
-	client.RequestParam.Url = "https://ecs." +  client.RequestParam.Endpoint + "/v2/" + client.TenantID + "/servers/" + server_id + "/os-interface"
+	client.RequestParam.Url = "https://ecs." + client.RequestParam.Endpoint + "/v2/" + client.TenantID + "/servers/" + server_id + "/os-interface"
 	client.RequestParam.Method = modules.HTTP_GET
 	client.RequestParam.RequestContentType = modules.ApplicationJson
 	client.RequestParam.BodyContent = ""
@@ -49,7 +49,7 @@ func (client *Client) ListInterfaces(server_id string) novaModules.ListInterface
 func (client *Client) CreateKeypair(createKeypairReq novaModules.CreateKeypairReq) novaModules.CreateKeypairResp {
 	createKeypairResp := novaModules.CreateKeypairResp{}
 
-	client.RequestParam.Url = "https://ecs." +  client.RequestParam.Endpoint + "/v2/" + client.TenantID + "/os-keypairs"
+	client.RequestParam.Url = "https://ecs." + client.RequestParam.Endpoint + "/v2/" + client.TenantID + "/os-keypairs"
 	client.RequestParam.Method = modules.HTTP_POST
 	client.RequestParam.RequestContentType = modules.ApplicationJson
 	client.RequestParam.BodyContent = createKeypairReq.GetBodyContent()
@@ -72,7 +72,7 @@ func (client *Client) CreateKeypair(createKeypairReq novaModules.CreateKeypairRe
 func (client *Client) DeleteKeyPair(keypair_name string) novaModules.DeleteKeyPairResp {
 	deleteKeyPairResp := novaModules.DeleteKeyPairResp{}
 
-	client.RequestParam.Url = "https://ecs." +  client.RequestParam.Endpoint + "/v2/" + client.TenantID + "/os-keypairs/" + keypair_name
+	client.RequestParam.Url = "https://ecs." + client.RequestParam.Endpoint + "/v2/" + client.TenantID + "/os-keypairs/" + keypair_name
 	client.RequestParam.Method = modules.HTTP_DELETE
 	client.RequestParam.RequestContentType = modules.ApplicationJson
 	client.RequestParam.BodyContent = ""
@@ -94,7 +94,7 @@ func (client *Client) DeleteKeyPair(keypair_name string) novaModules.DeleteKeyPa
 func (client *Client) StartServer(server_id string) novaModules.StartServerResp {
 	startServer := novaModules.StartServerResp{}
 
-	client.RequestParam.Url = "https://ecs." +  client.RequestParam.Endpoint + "/v2/" + client.TenantID + "/servers/" + server_id + "/action"
+	client.RequestParam.Url = "https://ecs." + client.RequestParam.Endpoint + "/v2/" + client.TenantID + "/servers/" + server_id + "/action"
 	client.RequestParam.Method = modules.HTTP_POST
 	client.RequestParam.RequestContentType = modules.ApplicationJson
 	client.RequestParam.BodyContent = "{ \"os-start\": {} }"
@@ -116,7 +116,7 @@ func (client *Client) StartServer(server_id string) novaModules.StartServerResp 
 func (client *Client) StopServer(server_id string) novaModules.StopServerResp {
 	stopServer := novaModules.StopServerResp{}
 
-	client.RequestParam.Url = "https://ecs." +  client.RequestParam.Endpoint + "/v2/" + client.TenantID + "/servers/" + server_id + "/action"
+	client.RequestParam.Url = "https://ecs." + client.RequestParam.Endpoint + "/v2/" + client.TenantID + "/servers/" + server_id + "/action"
 	client.RequestParam.Method = modules.HTTP_POST
 	client.RequestParam.RequestContentType = modules.ApplicationJson
 	client.RequestParam.BodyContent = "{ \"os-stop\": {} }"
@@ -138,7 +138,7 @@ func (client *Client) StopServer(server_id string) novaModules.StopServerResp {
 func (client *Client) RebootServer(server_id, rebootType string) novaModules.RebootServerResp {
 	rebootServer := novaModules.RebootServerResp{}
 
-	client.RequestParam.Url = "https://ecs." +  client.RequestParam.Endpoint + "/v2/" + client.TenantID + "/servers/" + server_id + "/action"
+	client.RequestParam.Url = "https://ecs." + client.RequestParam.Endpoint + "/v2/" + client.TenantID + "/servers/" + server_id + "/action"
 	client.RequestParam.Method = modules.HTTP_POST
 	client.RequestParam.RequestContentType = modules.ApplicationJson
 	bodyMap := make(map[string]map[string]string)
@@ -166,7 +166,7 @@ func (client *Client) RebootServer(server_id, rebootType string) novaModules.Reb
 func (client *Client) DeleteAnServer(server_id string) novaModules.DeleteAnServerResp {
 	deleteAnServerResp := novaModules.DeleteAnServerResp{}
 
-	client.RequestParam.Url = "https://ecs." +  client.RequestParam.Endpoint + "/v2/" + client.TenantID + "/servers/" + server_id
+	client.RequestParam.Url = "https://ecs." + client.RequestParam.Endpoint + "/v2/" + client.TenantID + "/servers/" + server_id
 	client.RequestParam.Method = modules.HTTP_DELETE
 	client.RequestParam.RequestContentType = modules.ApplicationJson
 	client.RequestParam.BodyContent = ""
@@ -192,7 +192,7 @@ func (client *Client) ShowServer(server_id string) novaModules.ShowServerResp {
 	showServerResp.Server.NumaOpts = -1
 	showServerResp.Server.Progress = -1
 
-	client.RequestParam.Url = "https://ecs." +  client.RequestParam.Endpoint + "/v2/" + client.TenantID + "/servers/" + server_id
+	client.RequestParam.Url = "https://ecs." + client.RequestParam.Endpoint + "/v2/" + client.TenantID + "/servers/" + server_id
 	client.RequestParam.Method = modules.HTTP_GET
 	client.RequestParam.RequestContentType = modules.ApplicationJson
 	client.RequestParam.BodyContent = ""
