@@ -356,6 +356,14 @@ func (d *Driver) Create() error {
 		return fmt.Errorf("%s | Failed to configure instance network: %v", d.MachineName, err)
 	}
 
+	log.Infof("%s | Get instance state...", d.MachineName)
+	// calling GetState to get PrivateAddress, so just ignore return value and error
+	if _, err := d.GetState(); err != nil {
+		// print Error log without returning an error
+		log.Errorf("%s | Get instance state failed: %v", d.MachineName, err)
+		return nil
+	}
+
 	return err
 }
 
