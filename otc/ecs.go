@@ -684,7 +684,8 @@ func (d *Driver) configureSubnet(subnetId string) error {
 		if subnetId == subnet.Id {
 			log.Debugf("%s | Found existing subnet %s", d.MachineName, subnet.Id)
 			d.SubnetId = subnet.Id
-			d.AvailableZone = subnet.Availability_zone
+			//there is no azs in response in new apis
+			//d.AvailableZone = subnet.Availability_zone
 			log.Debugf("%s | Subnet id is: %s : %s and available zone is: %s", d.MachineName, subnet.Id, d.SubnetId, d.AvailableZone)
 			break
 		}
