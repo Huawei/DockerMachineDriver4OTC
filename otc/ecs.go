@@ -427,7 +427,7 @@ func (d *Driver) getIPAddress() {
 	// ref: https://github.com/docker/machine/blob/master/libmachine/drivers/base.go#L14-L17
 	if d.ElasticIP != "" {
 		d.IPAddress = d.ElasticIP
-	else {
+	} else {
 		d.IPAddress = d.PrivateIPAddress
 	}
 
