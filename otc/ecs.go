@@ -356,15 +356,9 @@ func (d *Driver) Create() error {
 		return fmt.Errorf("%s | Failed to configure instance network: %v", d.MachineName, err)
 	}
 
-	log.Infof("%s | Get instance state...", d.MachineName)
-	// calling GetState to get PrivateAddress, so just ignore return value and error
-	if _, err := d.GetState(); err != nil {
-		// print Error log without returning an error
-		log.Errorf("%s | Get instance state failed: %v", d.MachineName, err)
-		return nil
-	}
+	d.getIPAddress()
 
-	return err
+	return nil
 }
 
 func (d *Driver) GetSSHHostname() (string, error) {
@@ -372,7 +366,7 @@ func (d *Driver) GetSSHHostname() (string, error) {
 }
 
 func (d *Driver) GetIP() (string, error) {
-	return d.ElasticIP, nil
+	return d.IPAddress, nil
 }
 
 func (d *Driver) Start() error {
@@ -406,7 +400,39 @@ func (d *Driver) DriverName() string {
 }
 
 func (d *Driver) GetURL() (string, error) {
-	return fmt.Sprintf("tcp://%s:%d", d.ElasticIP, dockerPort), nil
+	return fmt.Sprintf("tcp://%s:%d", d.IPAddress, dockerPort), nil
+}
+
+func (d *Driver) getIPAddress() {
+	log.Infof("%s | Getting IP addresses...", d.MachineName)
+	pClient := d.initClient()
+	stateResp := pClient.ShowServer(d.InstanceId)
+	if stateResp.ResponseCode != modules.HttpOK {
+		log.Errorf("%s | Failed to get instance %s: state %v", d.MachineName, d.InstanceId, stateResp.ErrorInfo.Description)
+		return
+	}
+
+	// FIXME: PrivateIPAddress is not stored to config.json for now
+	// because docker-machine did not get any update from drivers
+	for _, paddrs := range stateResp.Server.Addresses {
+		for _, paddr := range paddrs {
+			if paddr.Addr != "" {
+				split := strings.Split(paddr.Addr, " ")
+				d.PrivateIPAddress = split[0]
+			}
+		}
+	}
+
+	// Populate standard BaseDriver.IPAddress property
+	// ref: https://github.com/docker/machine/blob/master/libmachine/drivers/base.go#L14-L17
+	if d.ElasticIP != "" {
+		d.IPAddress = d.ElasticIP
+	else {
+		d.IPAddress = d.PrivateIPAddress
+	}
+
+	log.Infof("%s | Driver IP address set to %s", d.MachineName, d.IPAddress)
+	return
 }
 
 func (d *Driver) GetState() (state.State, error) {
@@ -419,17 +445,6 @@ func (d *Driver) GetState() (state.State, error) {
 		err := fmt.Errorf("%s | Failed to get instance %s: state %v", d.MachineName, d.InstanceId, stateResp.ErrorInfo.Description)
 		log.Error(err)
 		return state.None, err
-	}
-
-	// FIXME: PrivateIPAddress is not stored to config.json for now
-	// because docker-machine did not get any update from drivers
-	for _, paddrs := range stateResp.Server.Addresses {
-		for _, paddr := range paddrs {
-			if paddr.Addr != "" {
-				split := strings.Split(paddr.Addr, " ")
-				d.PrivateIPAddress = split[0]
-			}
-		}
 	}
 
 	switch stateResp.Server.Status {
@@ -611,7 +626,7 @@ func (d *Driver) checkJobStatus(jobid string) error {
 			return fmt.Errorf("%s | Failed to check instance status: %v", d.MachineName, ecsJobStatusResp.ErrorInfo.Description)
 		}
 		log.Debugf("job status: %s", ecsJobStatusResp.Status)
-		time.Sleep(60 * time.Second)
+		time.Sleep(10 * time.Second)
 	}
 
 	return nil
@@ -652,8 +667,9 @@ func (d *Driver) configureNetwork() error {
 	}
 
 	log.Debugf("%s | Waiting for elastic ip to be ready ...", d.MachineName)
-	//waiting for elastic ip to be ready
-	time.Sleep(60 * time.Second)
+	// waiting for elastic ip to be ready
+	// TODO: Wait for READY status instead of relying on sleep
+	time.Sleep(20 * time.Second)
 
 	log.Debugf("%s | Associate elastic ip to instance nic port ...", d.MachineName)
 
