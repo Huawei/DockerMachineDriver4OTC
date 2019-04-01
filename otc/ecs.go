@@ -644,7 +644,7 @@ func (d *Driver) configureNetwork() error {
 
 	// Exit if ElasticIp is set to false
 	if d.ElasticIpBool == 0 { 
-		log.Debugf("%s | An ElasticIp won't be allocated", d.MachineName)
+		log.Infof("%s | An ElasticIp won't be allocated", d.MachineName)
 		return nil 
 	}
 
