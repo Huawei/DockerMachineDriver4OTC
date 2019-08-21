@@ -44,8 +44,8 @@ Option Name                                          | Description              
 ``--otc-root-volume-size``|Root Volume Size for your instance||
 ``--otc-root-volume-type``|Root Volume type for your instance||
 ``--otc-ssh-user``|Instance's optional ssh user||
-``--otc-subnet-id``|Subnet ID for your instance private network (Network ID in OTC Web GUI)||
-``--otc-tenant-id``|Tenant ID (Project ID in OTC Web GUI)||
+``--otc-subnet-id``|Subnet ID for your instance private network (Network ID)||
+``--otc-tenant-id``|Tenant ID (Project ID)||
 
 
 ## Environment variables and default values:
