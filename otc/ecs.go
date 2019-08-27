@@ -72,6 +72,7 @@ type Driver struct {
 	JobId           string
 
 	//network
+	ElasticIpBool     int
 	ElasticIPId       string
 	ElasticIP         string
 	SecurityGroupName string
@@ -197,6 +198,12 @@ func (d *Driver) GetCreateFlags() []mcnflag.Flag {
 			Value:  "",
 			EnvVar: "SSH_USER",
 		},
+		mcnflag.IntFlag{
+			Name: "otc-elastic-ip",
+			Usage: "Set it to 1 to allocate ElasticIP",
+			Value: 0,
+			EnvVar: "ELASTIC_IP",
+		},
 	}
 }
 
@@ -219,6 +226,7 @@ func (d *Driver) SetConfigFromFlags(flags drivers.DriverOptions) error {
 	d.BandwidthType = flags.String("otc-bandwidth-type")
 	d.ElasticIpType = flags.String("otc-elasticip-type")
 	d.SSHUser = flags.String("otc-ssh-user")
+	d.ElasticIpBool = flags.Int("otc-elastic-ip")
 	//fmt.Printf("test for region: %s\n", d.Region)
 	return d.checkConfig()
 }
@@ -633,6 +641,13 @@ func (d *Driver) checkJobStatus(jobid string) error {
 }
 
 func (d *Driver) configureNetwork() error {
+
+	// Exit if ElasticIp is set to false
+	if d.ElasticIpBool == 0 { 
+		log.Infof("%s | An ElasticIp won't be allocated", d.MachineName)
+		return nil 
+	}
+
 	log.Debugf("%s | Allocate elastic ip ...", d.MachineName)
 
 	elasticIpCreate := &vpcModules.PublicipCreate{}
