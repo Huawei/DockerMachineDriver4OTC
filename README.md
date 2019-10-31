@@ -46,6 +46,7 @@ Option Name                                          | Description              
 ``--otc-ssh-user``|Instance's optional ssh user||
 ``--otc-subnet-id``|Subnet ID for your instance private network (Network ID)||
 ``--otc-tenant-id``|Tenant ID (Project ID)||
+``--otc-elastic-ip``|Set to 0 to not allocate an EIP (use private IP)||
 
 
 ## Environment variables and default values:
@@ -70,6 +71,7 @@ Option Name                                          | Description              
 | `--otc-ssh-user`		| `SSH_USER`		| -                |
 | `--otc-subnet-id`		| `SUBNET_ID`		| -                |
 | `--otc-tenant-id`		| `TENANT_ID`		| -                |
+| `--otc-elastic-ip`		| `ELASTIC_IP`		| `1`                |
 
 Each environment variable may be overloaded by its option equivalent at runtime.
 
