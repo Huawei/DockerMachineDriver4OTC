@@ -78,4 +78,5 @@ const (
 	CREDENTIAL                  = "Credential"
 	SDK_AUTHORIZATION_HEADER    = "Authorization"
 	SDK_X_AUTH_TOKEN            = "X-Auth-Token"
+	X_PROJECT_ID                = "X-Project-Id"
 )

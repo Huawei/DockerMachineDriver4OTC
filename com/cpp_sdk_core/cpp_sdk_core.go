@@ -206,6 +206,8 @@ func SendRequest(requestParam *modules.RequestParam) (result *modules.Result) {
 		var authString string
 		authString += modules.SDK_HMAC_SHA256 + " " + modules.CREDENTIAL + "=" + requestParam.AK + "/" + simpleTime + "/" + requestParam.Region + "/" + requestParam.ServiceName + "/" + modules.SDK_REQUEST + ", " + modules.SIGNED_HEADERS + "=" + signedHeadersValue + ", " + modules.SIGNATURE + "=" + finalSignature
 		headerCollection[strings.ToLower(modules.SDK_AUTHORIZATION_HEADER)] = strings.TrimSpace(authString)
+		//set special X-Project-Id header for subproject
+		headerCollection[modules.X_PROJECT_ID] = requestParam.Subproject_ID
 	}
 
 	conn := &http.Client{Transport: getTransport()}
