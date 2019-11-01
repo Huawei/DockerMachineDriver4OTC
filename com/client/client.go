@@ -129,6 +129,7 @@ func InitV4Client(AK, SK, TenantID string, clientConfiguration modules.ClientCon
 	RequestParam.SK = SK
 	RequestParam.Token = ""
 	RequestParam.AuthType = modules.V4_AUTH
+	RequestParam.Subproject_ID = TenantID
 	client = &Client{TenantID, RequestParam}
 
 	return client
@@ -150,6 +151,7 @@ func InitTokenClient(Token, TenantID string, clientConfiguration modules.ClientC
 	RequestParam.ServiceName = clientConfiguration.ServiceName
 	RequestParam.Token = Token
 	RequestParam.AuthType = modules.Token_AUTH
+	RequestParam.Subproject_ID = TenantID
 	return &Client{TenantID, RequestParam}
 }
 
@@ -170,6 +172,7 @@ func GetToken(username, password, tenant_id string, clientConfiguration modules.
 	RequestParam.AuthType = modules.Token_AUTH
 	RequestParam.RequestContentType = modules.ApplicationJson
 	RequestParam.Token = ""
+	RequestParam.Subproject_ID = tenant_id
 
 	jsonStr := `{"auth": {"identity": {"methods": ["password"], "password": {"user": {"domain": {"name": ""}, "name": "", "password": ""}}}, "scope": {"domain": {"name": ""}, "project": {"id": ""}}}}`
 	var data AuthStructInfo

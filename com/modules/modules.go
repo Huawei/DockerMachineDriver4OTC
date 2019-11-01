@@ -58,6 +58,7 @@ type RequestParam struct {
 	RequestContentType string // Request content type
 	AuthType           int    // Authorization mode
 	Url                string // Http url
+	Subproject_ID      string // Subproject ID
 }
 
 /*
