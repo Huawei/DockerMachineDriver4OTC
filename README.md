@@ -90,7 +90,7 @@ cd $GOPATH/src/github.com/huawei/DockerMachineDriver4OTC
 The Driver Binary will be under ./bin/docker-machine-driver.linux-amd64
 Rename it and copy it to you local path
 ```bash
-cp ./bin/docker-machine-driver.linux-amd64 /usr/local/bin/docker-machine-driver-otc
+cp ./bin/docker-machine-driver-otc.linux-amd64 /usr/local/bin/docker-machine-driver-otc
 ```
 
 Alternatively you can also just rename it and add the folder to your ```$PATH```:
