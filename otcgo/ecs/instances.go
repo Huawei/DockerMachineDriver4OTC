@@ -31,6 +31,7 @@ type CreateInstanceAttribute struct {
 	SecGrps       []SecGrp    `json:"security_groups"`
 	AdminPass     string      `json:"adminPass"`
 	KeyName       string      `json:"key_name"`
+	UserData      []byte      `json:"user_data"`
 }
 
 type CreateInstanceArgs struct {

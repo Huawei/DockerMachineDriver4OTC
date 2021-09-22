@@ -3,7 +3,7 @@ package otc
 import (
 	"crypto/md5"
 	"crypto/rand"
-	_ "encoding/base64"
+	"encoding/base64"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -70,6 +70,7 @@ type Driver struct {
 	AdminPass       string
 	KeyName         string
 	JobId           string
+	UserData        []byte
 
 	//network
 	ElasticIpBool     int
@@ -204,6 +205,12 @@ func (d *Driver) GetCreateFlags() []mcnflag.Flag {
 			Value: 0,
 			EnvVar: "ELASTIC_IP",
 		},
+		mcnflag.StringFlag{
+			EnvVar: "OS_USER_DATA_FILE",
+			Name:   "otc-user-data-file",
+			Usage:  "File containing an openstack userdata script",
+			Value:  "",
+		},
 	}
 }
 
@@ -227,6 +234,15 @@ func (d *Driver) SetConfigFromFlags(flags drivers.DriverOptions) error {
 	d.ElasticIpType = flags.String("otc-elasticip-type")
 	d.SSHUser = flags.String("otc-ssh-user")
 	d.ElasticIpBool = flags.Int("otc-elastic-ip")
+	if name := flags.String("otc-user-data-file"); name != "" {
+		userData, err := ioutil.ReadFile(name)
+		if err == nil {
+			d.UserData = userData
+		} else {
+			return err
+		}
+	}
+
 	//fmt.Printf("test for region: %s\n", d.Region)
 	return d.checkConfig()
 }
@@ -588,6 +604,7 @@ func (d *Driver) createInstance() (ecsModules.CreateCloudServerResp, error) {
 	instanceDesc.SetKey_name(d.KeyName)
 	instanceDesc.SetAdminPass(d.AdminPass)
 	instanceDesc.SetSecurity_groups(sgList)
+	instanceDesc.SetUser_data(base64.StdEncoding.EncodeToString(d.UserData))
 
 	/*log.Debugf("%s | SSH User: %s", d.MachineName, d.SSHUser)
 	if d.SSHUser != "" {
